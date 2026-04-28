@@ -19,7 +19,6 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const navigate = useNavigate();
     const [cookies, setCookie, removeCookie] = useCookies(["userID", "username", "role"]);
     const [user, setUser] = useState<User | null>(() => {
         const userId = cookies.userID;
@@ -37,7 +36,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 setCookie("username", username, { path: "/" });
                 setCookie("role", "user", { path: "/" });
             } else if (data === 0){
-                navigate("/admin");
                 setUser({ id: data, username, role: "admin" });
                 setCookie("userID", data.toString(), { path: "/" });
                 setCookie("username", username, { path: "/" });

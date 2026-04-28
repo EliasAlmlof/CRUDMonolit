@@ -69,6 +69,11 @@ const LogInMenu = () => {
         setLoading(true);
         try {
             await login(username, password);
+            if (user?.role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
         } finally {
             setLoading(false);
         }
