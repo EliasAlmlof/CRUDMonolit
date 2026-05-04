@@ -82,7 +82,7 @@ public class UserService {
      *         0 if admin login is successful, -2 if credentials do not match any user or admin.
      */
     public long login(String name, String password) {
-        if(userRepo.userExists(name) == 1){
+        if(userRepo.userExists(name)){
             User user = userRepo.rightPassword(name,password);
             return user == null ? -1 : user.getUserId();
         }
@@ -97,7 +97,7 @@ public class UserService {
      * @return true if the user exists, false otherwise.
      */
     public boolean userExists(String username) {
-        return userRepo.userExists(username) == 1;
+        return userRepo.userExists(username);
     }
 
     /**
