@@ -33,6 +33,7 @@ public class Controller {
     @PostMapping("/user/save")
     public String postUser(@RequestBody User user) {
         if(festivalService.userExists(user.getUsername())) {
+            System.out.println("GGff15");
             return "Username-Taken";
         }
         try {
@@ -90,9 +91,11 @@ public class Controller {
     }
 
     @PostMapping("/festival/update/{festivalId}")
-    public void addArtistsToFestival(@PathVariable long festivalId, @RequestBody Festival festival) {
-        festivalService.addArtistsToFestival(festivalId, festival.getArtists());
-        festivalService.updateFestivalDescription(festivalId, festival.getFestivalDescription());
+    public void addArtistsToFestival(
+            @PathVariable Long festivalId,
+            @RequestBody List<Long> artistIds
+    ) {
+        festivalService.addArtistsToFestival(festivalId, artistIds);
     }
 
     @PutMapping("/festival/update/description/{festivalId}")
@@ -179,7 +182,7 @@ public class Controller {
     ////////////////////////////////////Artist////////////////
     @PostMapping("/artist/save")
     public String postArtist(@RequestBody Artist artist) {
-        if (festivalService.artistExists(artist.getArtist_name())) {
+        if (festivalService.artistExists(artist.getArtistName())) {
             return "Artist-Exists";
         }
         festivalService.saveArtist(artist);
@@ -188,7 +191,7 @@ public class Controller {
 
     @PutMapping("/artist/updateage")
     public void updateArtistAge(@RequestBody Artist artist) {
-        festivalService.updateArtistAge(artist.getArtist_name(),artist.getAge());
+        festivalService.updateArtistAge(artist.getArtistName(),artist.getAge());
     }
 
     @GetMapping("/artist/findall")

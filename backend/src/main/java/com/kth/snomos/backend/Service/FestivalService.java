@@ -115,7 +115,7 @@ public class FestivalService {
      * @return Artist object if found, otherwise null.
      */
     public Artist findArtistByName(String name) {
-        return artistRepo.existsByNameLike(name) ? artistRepo.findArtistByName(name) : null;
+        return artistRepo.existsByNameLike(name) == 1 ? artistRepo.findArtistByName(name) : null;
     }
 
     /**
@@ -125,7 +125,7 @@ public class FestivalService {
      * @return true if the artist exists, false otherwise.
      */
     public boolean artistExists(String name) {
-        return artistRepo.existsByName(name);
+        return artistRepo.existsByName(name) == 1;
     }
 
     /**
@@ -150,16 +150,26 @@ public class FestivalService {
      * Adds a list of artists to an existing festival.
      *
      * @param festivalId ID of the festival.
-     * @param artistList List of artists to add.
      */
-    public void addArtistsToFestival(long festivalId, List<Artist> artistList) {
-        Festival festival = festivalRepo.findById(festivalId).orElseThrow();
-        for (Artist specificArtist : artistList) {
-            Artist currentArtist = artistRepo.findById(specificArtist.getArtist_name()).orElseThrow();
-            festival.getArtists().add(currentArtist);
-            currentArtist.getFestivals().add(festival);
-            festivalRepo.save(festival);
+    public void addArtistsToFestival(Long festivalId, List<Long> artistIds) {
+
+        if (festivalId == null) {
+            throw new IllegalArgumentException("festivalId is null (path variable not bound)");
         }
+
+        Festival festival = festivalRepo.findById(festivalId)
+                .orElseThrow(() -> new RuntimeException("Festival not found: " + festivalId));
+
+        List<Artist> artists = artistRepo.findAllById(artistIds);
+
+        if (artists.isEmpty()) {
+            throw new RuntimeException("No artists found for IDs: " + artistIds);
+        }
+
+        festival.getArtists().clear();
+        festival.getArtists().addAll(artists);
+
+        festivalRepo.save(festival);
     }
 
     /**
@@ -291,7 +301,7 @@ public class FestivalService {
      *         0 if admin login is successful, -2 if credentials do not match any user or admin.
      */
     public long login(String name, String password) {
-        if(userRepo.userExists(name)){
+        if(userRepo.userExists(name) == 1){
             User user = userRepo.rightPassword(name,password);
             return user == null ? -1 : user.getUserId();
         }
@@ -306,7 +316,7 @@ public class FestivalService {
      * @return true if the user exists, false otherwise.
      */
     public boolean userExists(String username) {
-        return userRepo.userExists(username);
+        return userRepo.userExists(username) == 1;
     }
 
     /**

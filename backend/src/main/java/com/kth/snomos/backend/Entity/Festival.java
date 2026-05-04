@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "Festival")
+@Table(name = "festival")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Festival {
@@ -38,8 +38,10 @@ public class Festival {
     private List<Booking> bookings;
 
     @ManyToMany
-    @JoinTable(name = "artist_festival",
+    @JoinTable(
+            name = "artist_festival",
             joinColumns = @JoinColumn(name = "festival_id"),
-            inverseJoinColumns = @JoinColumn(name = "artist_name"))
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Artist> artists;
 }

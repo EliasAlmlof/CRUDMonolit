@@ -9,13 +9,16 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "Artist")
+@Table(name = "artist")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Artist {
 
     @Id
-    private String artist_name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long artistId;
+
+    private String artistName;
 
     private int age;
 
