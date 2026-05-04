@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ArtistRepo extends JpaRepository<Artist, String> {
+public interface ArtistRepo extends JpaRepository<Artist, Long> {
     @Query(value = "SELECT * FROM artist WHERE LOWER(artist_name) LIKE LOWER(CONCAT(:val, '%'))",nativeQuery = true)
     Artist findArtistByName(@Param("val") String val);
 

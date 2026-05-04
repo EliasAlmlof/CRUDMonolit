@@ -115,7 +115,7 @@ public class FestivalService {
      * @return Artist object if found, otherwise null.
      */
     public Artist findArtistByName(String name) {
-        return artistRepo.existsByNameLike(name) == 1 ? artistRepo.findArtistByName(name) : null;
+        return artistRepo.existsByNameLike(name) ? artistRepo.findArtistByName(name) : null;
     }
 
     /**
@@ -125,7 +125,7 @@ public class FestivalService {
      * @return true if the artist exists, false otherwise.
      */
     public boolean artistExists(String name) {
-        return artistRepo.existsByName(name) == 1;
+        return artistRepo.existsByName(name);
     }
 
     /**
@@ -301,7 +301,7 @@ public class FestivalService {
      *         0 if admin login is successful, -2 if credentials do not match any user or admin.
      */
     public long login(String name, String password) {
-        if(userRepo.userExists(name) == 1){
+        if(userRepo.userExists(name)){
             User user = userRepo.rightPassword(name,password);
             return user == null ? -1 : user.getUserId();
         }
@@ -316,7 +316,7 @@ public class FestivalService {
      * @return true if the user exists, false otherwise.
      */
     public boolean userExists(String username) {
-        return userRepo.userExists(username) == 1;
+        return userRepo.userExists(username);
     }
 
     /**
